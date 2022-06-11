@@ -10,9 +10,9 @@
 # For example, if s = 'abcbcd', then your program should print
 # >> Longest substring in alphabetical order is: abc
 
-#s = 'eeomgynmmcircgbnoq'
+s = 'eeomgynmmcircgbnoq'
 #s = 'abcdefghijklmnopqrstuvwxyz'
-s = 'azcbobobegghakl'
+#s = 'azcbobobegghakl'
 #s = 'obxhuxvocxnuytepyk'
 
 curr_seq = s[0]
@@ -27,27 +27,3 @@ for letter in s[1:]:
         curr_seq = letter
 
 print("Longest substring in alphabetical order is:", long_seq)
-
-# seq = 0
-# curr_index = 0
-# big_index = 0
-# big_seq = 0
-
-# for i in range(len(s)-1):
-#     if (ord(s[i]) <= ord(s[i+1])):
-#         seq += 1
-#         if (seq <=1):
-#             curr_index = i
-#         elif (seq == len(s)-1):
-#              big_seq = seq
-#              seq = 0
-#              big_index = curr_index
-#     else:
-#         if (seq > big_seq):
-#             big_seq = seq
-#             seq = 0
-#             big_index = curr_index
-#         else:
-#             seq = 0
-
-# print("Longest substring in alphabetical order is:", s[big_index:big_index+big_seq+1])
