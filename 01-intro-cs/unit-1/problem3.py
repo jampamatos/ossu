@@ -10,48 +10,44 @@
 # For example, if s = 'abcbcd', then your program should print
 # >> Longest substring in alphabetical order is: abc
 
+#s = 'eeomgynmmcircgbnoq'
+#s = 'abcdefghijklmnopqrstuvwxyz'
 s = 'azcbobobegghakl'
+#s = 'obxhuxvocxnuytepyk'
 
-seq = 0
-curr_index = 0
-big_index = 0
-big_seq = 0
+curr_seq = s[0]
+long_seq = s[0]
 
-for i in range(len(s)-1):
-    if (ord(s[i]) <= ord(s[i+1])):
-        seq += 1
-        if (seq <=1):
-            curr_index = i
+for letter in s[1:]:
+    if letter >= curr_seq[-1]:
+        curr_seq += letter
+        if len(curr_seq) > len(long_seq):
+            long_seq = curr_seq
     else:
-        if (seq > big_seq):
-            big_seq = seq
-            seq = 0
-            big_index = curr_index
-        else:
-            seq = 0
+        curr_seq = letter
 
-print("Longest substring in alphabetical order is:", s[big_index:big_index+big_seq+1])
+print("Longest substring in alphabetical order is:", long_seq)
 
-# big_initial_index = 0
-# big_sequence = 0
-
-# temp_index = 0
-# temp_sequence = 0
+# seq = 0
+# curr_index = 0
+# big_index = 0
+# big_seq = 0
 
 # for i in range(len(s)-1):
-#     while True:
-#         if (ord(s[i]) <= ord(s[i+1])):
-#             print(s[i], s[i+1])
-#             temp_sequence += 1
-#             print("temp sequence:",temp_sequence)
-#             print("string sequence:", s[temp_index:temp_sequence+1])
-#             if big_sequence == 0:
-#                 temp_index = i
+#     if (ord(s[i]) <= ord(s[i+1])):
+#         seq += 1
+#         if (seq <=1):
+#             curr_index = i
+#         elif (seq == len(s)-1):
+#              big_seq = seq
+#              seq = 0
+#              big_index = curr_index
+#     else:
+#         if (seq > big_seq):
+#             big_seq = seq
+#             seq = 0
+#             big_index = curr_index
 #         else:
-#             print("temp index:", temp_index)
-#             big_sequence = temp_sequence
-#             big_initial_index = temp_index
-#             temp_sequence = 0
-#             temp_index = 0
-#         break
-# print (big_initial_index, big_sequence)
+#             seq = 0
+
+# print("Longest substring in alphabetical order is:", s[big_index:big_index+big_seq+1])
