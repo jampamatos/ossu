@@ -10,7 +10,7 @@
 # For example, if s = 'abcbcd', then your program should print
 # >> Longest substring in alphabetical order is: abc
 
-s = 'abcbcd'
+s = 'azcbobobegghakl'
 
 seq = 0
 curr_index = 0

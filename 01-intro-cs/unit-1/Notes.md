@@ -74,12 +74,13 @@
 - we can cast a type of object into another (convert)
   
   - **scalar (cannot be subdivided)**:
-    - int;
-    - float;
-    - bool;
-    - NoneType (None);
+    - `int`;
+    - `float`;
+    - `bool`;
+    - `NoneType` (None);
 
   - **non-scalar** (have internal structure that can be accessed):
+    - `string`;
 
 - expression: `<object> <operator> <object>`
 
@@ -98,14 +99,45 @@
   
 - variables allows us to reuse names instead of value, makes code easier to change and read.
 
+- cannot be keywords
+
+- swap variables:
+
+```python
+x = 1
+y = 2
+
+y = x
+x = y
+# Won't work, x and y will be 1
+```
+
+```python
+x = 1
+y = 2
+
+temp = y # Bind y value to a temporary variable
+y = x
+x = temp # Bind the temp value -- which was y's -- to x.
+```
+
+```python
+# Using a tupple
+x = 1
+y = 2
+
+y,x = x,y
+# Python is unpacking the tuple on the right side of the = and storing it to the variable names on the left side. 
+```
+
 &nbsp;
 
-- **equality** is done with `==`; **inequality** with `!=`
+- Comparing **equality** is done with `==`; **inequality** with `!=`
 
 - logic operators on bools:
-  - `and;
-  - or;
-  - not`
+  - `and`;
+  - `or`;
+  - `not`
 
 - branching program:
   - a test that evaluates True of False
@@ -160,3 +192,297 @@ else:
 - The maximum time to run the program depends on the length of the program
 
 ### 1.2. Core Elements of Programs
+
+- String:
+  - letters, special charactes, spaces, digits
+  - enclosd in double or single quotation mark
+  - string concatenation is done with `+`.
+  - the type of an object tell the operator what to do: `+` with `int`will add numbers, `+`with `string`will concatenade **-- OVERLOAD**
+
+  - operations on strings:
+    - `'ab' + 'cd'` **- concatenation**
+    - `3 * 'eric'` **- successive concatenation**
+    - `len('eric')` **- length**
+    - `'eric'[1]` **- indexing**
+    - `'eric'[1:3]` **- slicing**:
+
+```python
+'eric'[1:3]
+# returns 'ri'
+'eric'[:3]
+#returns 'eri'
+'eric'[1:]
+# returns 'ric'
+'eric'[:]
+#returns 'eric'
+```
+
+- String slicing with negative indices:
+
+```python
+str = 'Hello, World!'
+str[-11:-5] #start at -5, until, but not including, -11
+# returns 'llo, W'
+str[-5:-11:-1] # Negative step, inverts the order of scan
+# returns 'oW, ol'
+str [-5:]
+# returns 'orld!'
+str [: -9]
+# returns 'Hell'
+str[::-2] # Negative step
+# returns '!lo olH'
+```
+
+- Comparing strings:
+  - comparison uses **lexicographical ordering**:
+    1. first the two items are compared, and if they differ this determines the outcome of the comparison;
+    2. if they are equal, the next two are compared, and so on
+    3. if all items are equal, the sequence is considered equal
+
+`'ABCDI' > 'ABCDA'`
+
+1. `'A' == 'A' True`
+2. `'B' == 'B' True`
+3. `'C' == 'C' True`
+4. `'D' == 'D' True`
+5. `'I' == 'A' False`
+6. `'I' > 'A' True`
+7. Then `'ABCDI' > 'ABCDA'` is `True`
+
+- Lexicographical order is the Unicode code point number of a char (function `ord()`)
+- Unicode code for uppercase and lowercase letter are **NOT THE SAME**:
+
+```python
+ord('a')
+# returns 97
+ord ('A')
+# returns 65
+'A' > 'a'
+# returns False
+'A' == 'a'
+# returns False
+'A' < 'a'
+# returns True
+```
+
+- The Pyton `in` Operator:
+  - The operators `in` and `not in` test for a collection membership, as in `element in coll` will return `True` if that element is in that collection, and `False` otherwise.
+
+- Input/Output:
+  - `print` output stuff to console
+  - `print` with multiple arguments will print each one spaced apart, but concatenated they will be joined together.
+
+  - `input('str')` will print `str` parameters and wait for user input, then return the entered sequence **as a string**.
+  - should be binded to a variable
+
+&nbsp;
+
+- Control in Loops:
+  - control the flow in a non-linear way
+
+- `while` loop:
+
+```python
+while <condition>
+  <expression>
+  <expression>
+  ...
+```
+
+1. `<condition>` evaluates to a Boolean
+2. if `<condition>` is `True`, do all the steps in the code block.
+3. check `<condition>` again.
+4. repeat until `<condition>` is `False`.
+
+```python
+n = 0
+while (n < 5):
+  print(n)
+  n += 1
+```
+
+&nbsp;
+
+- `for` loop:
+
+```python
+for <variable> in range(<some_num>):
+  <expression>
+  <expression>
+  ...
+```
+
+1. each time through the loop, `<variable>` takes a value
+2. first time, `<variable>` starts at the smallest value
+3. next time, `<variable>` gets prev value + 1
+4. runs block of code at each iteration, until range ends.
+
+```python
+for n in range(5):
+  print(n)
+# >> 0
+# >> 1
+# >> 2
+# >> 3
+# >> 4
+# range(int) returns a sequence of integers starting at 0 and ending before 'int'.
+```
+
+- `range(start, stop, step)`:
+  - default values are `start = 0` and `step = 1` and are optional
+  - loop until value is `stop - 1`.
+
+```python
+mysum = 0
+for i in range (7,10):
+  mysum += i
+print(mysum)
+# >> 24
+# 7, 8 and 9 added together.
+```
+
+```python
+mysum = 0
+for i in range (5,11,2):
+  mysum += i
+print(mysum)
+# >> 21
+# 5, 7 and 9 added together
+```
+
+- `break` statement
+  - immediately breaks out of loop, skipping remaining expressions in code block (*only innermost loop*).
+
+```python
+while <condition_1>:
+  while <condition_2>:
+    <expression_a>
+    break
+    <expression_b> #will never execute this expression
+  <expression_c>
+```
+
+```python
+mysum = 0
+
+for i in range(5,11,2):
+  mysum += i
+  if mysum == 5:
+    break
+print(mysum)
+# >> 5
+```
+
+| for loops                                          | while loops                                                                         |
+|----------------------------------------------------|-------------------------------------------------------------------------------------|
+| **known** number of iterations                     | **unbounded** number of iterations                                                  |
+| can **end early** via `break`                      | can **end early** via `break`                                                       |
+| uses a **counter**                                 | can use counter but **must be initialized** before loop and incremented inside loop |
+| **can rewrite** a `for` loop using a `while` loop  | **may not be able** to rewrite a `while` loop using a `for` loop                    |
+
+- Truthy and falsy values:
+
+```python
+num = 5
+
+if num:
+  print('Yes')
+else:
+  print ('No')
+
+# Will print 'Yes'.
+```
+
+```python
+str = '123'
+
+if string:
+  print('Hi')
+else:
+  print('Bye')
+
+# Will print 'Hi'.
+```
+
+- a **truthy** value is a value that is considered `True` when evaluated in a Boolean context.
+- a **falsy** value is a value that translates `False` when evaluated in a Boolean context.
+
+| Truthy | Falsy |
+|--------|-------|
+| Any number that is **NOT** 0 (positive and negative) | The number 0
+| Any string **NOT EMPTY** | An empty string `''` or `""`|
+|   | `None`
+
+- Iteration:
+  1. Start with a `Test`
+  2. If evaluates to `True`, then execute loop body once, and go back to reevaluate the `Test`
+  3. Repeat until `Test` evaluates to `False`, after which code following iteration statement is executed.
+
+Example: **square of a number by repetitive addition**
+
+`n² = n + n + n +... n` repeated `n` times.
+
+```python
+x = 3
+ans = 0
+itersLeft = x
+
+while (itersLeft != 0):
+  ans = ans + x
+  itersLeft -= 1
+
+print(str(x) + '*' + str(x) + ' = ' + str(ans))
+
+# >> 3*3 = 9
+```
+
+- Guess and check methods technique:
+  - Finding cube root of integer:
+  - Only positive integers:
+
+```python
+x = int(input('Enter an integer: '))
+ans = 0
+
+while ans**3 < x:
+    ans = ans + 1
+
+if ans**3 != x:
+    print(str(x) + ' is not a perfect cube')
+else:
+    print('Cube root of '+ str(x) + ' is ' + str(ans))
+```
+
+- To also test negative integers:
+
+```python
+x = int(input('Enter an integer: '))
+ans = 0
+
+while ans**3 < abs(x): # takes the absolute value of x
+    ans = ans + 1
+
+if ans**3 != abs(x):
+    print(str(x) + ' is not a perfect cube')
+else:
+    if x < 0:
+        ans = -ans
+    print('Cube root of '+ str(x) + ' is ' + str(ans))
+```
+
+- In a for loop:
+
+```python
+x = int(input('Enter an integer: '))
+
+for guess in range(abs(x) + 1):
+    if guess**3 >= abs(x):
+        break
+
+if guess**3 != abs(x):
+    print(x, 'is not a perfect cube.')
+else:
+    if x < 0:
+        guess = -guess 
+    print ('Cube root of ' + str(x) + ' is ' + str(guess))
+```
