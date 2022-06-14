@@ -6,6 +6,7 @@
   - [TABLE OF CONTENTS](#table-of-contents)
   - [UNIT 2 - SIMPLE PROGRAMS](#unit-2---simple-programs)
     - [2.1. Simple Algorithms](#21-simple-algorithms)
+    - [2.2. Simple Programs](#22-simple-programs)
 
 ## UNIT 2 - SIMPLE PROGRAMS
 
@@ -214,4 +215,156 @@ while abs(guess*guess - y) >= epsilon:
 
 print('numGuesses =', numGuesses)
 print('Square root of', y, 'is', guess)
+```
+
+### 2.2. Simple Programs
+
+- one file with one computation, with some piece of code containing a sequence of instructions is fine for small scale problems, but can get messy for larger problems
+- need a way to structure program
+- Good Programing:
+  - more code not necessarily a good thing
+  - measure good programmers by the amount of functionality
+  - decomposition and abstraction
+
+- **function -** a way to encapsulate pieces of computation
+- **decomposition -** break problem into different, self-contained, pieces
+- **abstraction -** suppress details of method to compute something from use of that computation
+
+- in programming, to decomposite a code is to divide it into **modules**
+  - self-contained
+  - reusable
+  - organized
+  - coherent
+- in programming, **abstraction** means to think of a piece of code as a *black box*
+  - cannot see details
+  - don't need to see details
+  - hide tedious coding details
+  - **function specifications** and **docstrings**
+
+- functions won't be computed unil invoked.
+- function characteristics:
+  - has a name
+  - has parameters (0 or more)
+  - has a docstring (optional but recomended)
+  - has a body -- sequence of instructions to happen when the function is called
+
+```python
+def is_even(i):
+    """
+    DOCSTRING:
+    Input: i, a positive int
+    Returns True if i is even, otherwise False
+    """
+
+    print("Hi!")
+    return i%2 == 0
+
+is_even(3)
+```
+
+- keyword `return` stops the computation and the value of the following expression is the one that will be returned to whatever called that function
+
+- variable scope:
+  - formal parameters gets bound to the value of the actual parameter when function is called
+  - new scope is created when enter a function
+- if a function has no `return` statement, it `return`s as `None`
+
+| `return`                                                       | `print`                                                   |
+|----------------------------------------------------------------|-----------------------------------------------------------|
+| only has meaning **inside** of function                        | can be used **outside** of function                       |
+| only **one** `return` executed inside of function              | can execute **many** `print` statements inside a function |
+| code inside function but after `return` statement not executed | code can be executed after `print` statement              |
+| has value associated to it, **given to function caller**       | has value associated to it, **outputted to console**      |
+
+- inside a function, **can access** a variable defined outside
+- inside a function, **cannot modify** a variable defined outside
+
+```python
+def f(y):
+    x = 1
+    x += 1
+    print(x)
+
+x = 5
+f(x)
+print(x)
+
+# >> 2
+# >> 5
+# x is redefined in scope of f, but different x objects are print
+#the first one from inside the function, the second one the global defined.
+```
+
+```python
+def g(y):
+    print(x)
+    print(x+1)
+
+x = 5
+g(x)
+print(x)
+
+# >> 5
+# >> 6
+# >> 5
+# g gets the value of x from outside, but the last print shows the global defined x.
+```
+
+```python
+def h(y):
+    x = x + 1
+
+x = 5
+h(x)
+print(x)
+
+# UnboundLocalError: local variable 'x' referenced before assignment
+```
+
+- Keyword arguments and default values:
+
+```python
+def printName(firstName, lastName, reverse):
+  if reverse:
+    print(lastName + ', ' + firstName)
+  else:
+    print(firstName + ', ' + lastName)
+
+printName("Jampa", "Matos", True)
+# >> Matos, Jampa
+printName("Jampa", "Matos", False)
+#>> Jampa, Matos
+```
+
+```python
+def printName(firstName, lastName, reverse = False):
+  if reverse:
+    print(lastName + ', ' + firstName)
+  else:
+    print(firstName + ', ' + lastName)
+
+printName("Jampa", "Matos", True)
+# >> Matos, Jampa
+printName("Jampa", "Matos")
+#>> Jampa, Matos
+
+# The default value for reverse is set to False, so if we omit it, it will be False. It will only be True if we explicitly tells it.
+```
+
+- Specifications:
+  - a contract between the implementer of function and users
+  - **Assumptions:** conditions that must be met by clients -- values of parameters
+  - **Guarantees:** conditions that must be met by the function, providing it has been called in manner consistent with assumptions.
+  - to be put in a **docstring**
+
+```python
+def is_even(i):
+
+  """
+  Input: i, a positive integer
+  Returns True if i is even, otherwise False
+  """
+  
+  print ('hi')
+  return i % 2 == 0
 ```
