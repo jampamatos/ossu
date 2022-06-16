@@ -368,3 +368,175 @@ def is_even(i):
   print ('hi')
   return i % 2 == 0
 ```
+
+- **Iteration** *vs* **Recursion**
+- Recursion is a way to design solutions by breaking up into pieces that are reusable -- **divide and conquer**
+- A function that inside of its body it calls itself
+
+- **Iterative algorithms** are looping constructs (`while` or `for` loops) with a set of variables that update each time through the loop.
+
+```python
+# An iterative solution to a function that multiplies 'a' by 'b' by adding 'a' to itself 'b' times
+
+def mult_inter(a,b):
+  result = 0
+  while b > 0:    # iteration
+    result += a   # current value of computation
+    b -= 1        # current value of iteration variable
+  return result
+```
+
+- In a recursive solution, you will have to reduce problem to a simple/smaller version of the same problem
+- you have to find a **base case**, which is a simple case that can be solved directly:
+
+`a * b = b * (a + a + a + a... + a)`
+
+`a * b = a + (b-1 * (a + a + a + ...a))`
+
+`a * b = a + a + (b-2 * (a + a + ...a))`
+
+when b = 1, a * b = a, so:
+
+```python
+def mult(a, b): 
+
+  if b == 1:                  #base case
+    return a
+  else:
+    return a + mult(a, b-1)   #recursive step
+```
+
+- Factorial:
+
+```python
+def factorial (n):
+  if n == 1:
+    return 1
+  else:
+    return n * factorial (n-1)
+```
+
+- Towers of Hanoi problem recursively:
+
+```python
+def printMove(fr, to):
+    print('Move from', fr, 'to', to)
+
+def towers(n, fr, to, spare):
+    if n == 1:
+        printMove(fr, to)
+    else:
+        towers(n-1, fr, spare, to)
+        towers(1, fr, to, spare)
+        towers(n-1, spare, to, fr)
+
+print(towers(4, 'P1', 'P2', 'P3'))
+```
+
+- Fibonacci numbers:
+
+```python
+def fib(x):
+    '''
+    Assumes x and int >= 0
+    Returns Fibonacci sum of x
+    '''
+    if x == 0 or x == 1:
+        return 1
+    else:
+        return fib(x-1) + fib(x-2)
+```
+
+- Palindromes:
+
+```python
+def isPalindrome(s):
+
+    def toChars(s):
+        s = s.lower()
+        ans = ''
+        for c in s:
+            if c in 'abcdefghijklmnopqrstuvwxyz':
+                ans += c
+        return ans
+
+    def isPal(s):
+        if len(s) <= 1:
+            return True
+        else:
+            return s[0] == s[-1] and isPal(s[1:-1])
+    
+    return isPal(toChars(s))
+```
+
+- **Divide and conquer:** solving a hard problem by breaking it into a set of sub-problems such that:
+  - sub-problems are easier to solve than the original
+  - solutions of the sub-problems can be combined to solve the original
+
+- Modules and files:
+  - so far all code stored in one file
+  - large collection of code should use different files -- **modules** -- which are .py files containing collections of Python definitions and statements
+
+```python
+# a file called 'circle.py'
+
+pi = 3.14159
+
+def area(radius):
+  return pi * (radius ** 2)
+
+def circumference(radius):
+  return 2 * pi * radius
+```
+
+```python
+import circle
+
+pi = 4
+
+print(pi)
+#>> 3
+
+print(circle.pi)
+#>> 3.14159
+
+print(circle.area(3))
+#>> 28.27431
+
+print(circle.circumference(3))
+#>> 18.849539999999998
+```
+
+- If we don't want to refer to functions and variables by their module, we can use:
+
+```python
+from circle import *
+
+print(pi)
+#>> 3.14159
+
+print(area(3))
+#>> 28.27431
+```
+
+- **Files**:
+  - need a way to save our work for later user
+  - operating systems have their own way of handling files -- Python uses a **file handler** that access files operating-system independent
+  - `nameHandle = open('kids', 'w')` creates a file named `kids` and returns a file handler which we can name and reference
+  - the `w` indicates the file is opened for writing into it.
+
+```python
+nameHandle = open('kids', 'w')
+
+for i in range(2):
+  name = input('Enter name:')
+  nameHandle.write(name + " \ ") #'Enter' key
+nameHandle.close() 
+```
+
+```python
+nameHanle = open('kids', 'r')
+for line in nameHandle:
+  print(line)
+nameHandle.close()
+```

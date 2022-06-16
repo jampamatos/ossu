@@ -1,14 +1,21 @@
-str1 = 'exterminate!' 
-str2 = 'number one - the larch'
+def isPalindrome(s):
 
-str2 = str2.capitalize()
-print(str2)
-print(str2.swapcase())
-print(str1.index('e'))
-print(str2.index('n'))
-print(str2.find('n'))
-print(str2.find('!'))
-print(str1.count('e'))
-str1 = str1.replace('e', '*')
-print(str1)
-print(str2.replace('one', 'seven'))
+    def toChars(s):
+        s = s.lower()
+        ans = ''
+        for c in s:
+            if c in 'abcdefghijklmnopqrstuvwxyz':
+                ans += c
+        return ans
+
+    def isPal(s):
+        if len(s) <= 1:
+            return True
+        else:
+            return s[0] == s[-1] and isPal(s[1:-1])
+    
+    return isPal(toChars(s))
+
+print(isPalindrome('eve'))
+print(isPalindrome('uai'))
+print(isPalindrome('socorram-me subi no onibus em marrocos'))
