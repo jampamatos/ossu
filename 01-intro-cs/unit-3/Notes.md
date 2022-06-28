@@ -410,3 +410,117 @@ for elt in map(min, L1, L2):
 ```
 
 ### 3.2. Dictionaries
+
+- Way to index item of interest directly into one data structure, not separate lists
+- Stores pairs of data in a key/value structure
+
+```python
+my_dict = {} # empty dictionary
+grades = {'Ana':'B', 'John':'A+', 'Denise':'A'}
+
+grades['John']
+# >> 'A+'
+
+grades['Sylvan']
+# >> KeyError: 'Sylvan'
+
+grades['Sylvan'] = 'A'
+# >> {'Ana':'B', 'John':'A+', 'Denise':'A', 'Sylvan': 'A'}
+
+'John' in grades
+# >> True
+
+'Daniel' in grades
+# >> False
+
+del(grades['Denise'])
+# >> {'Ana':'B', 'John':'A+', 'Sylvan': 'A'}
+
+grades.keys()
+# >> dict_key(['Sylvan', 'Ana', 'John'])
+# Iterable, like a list
+
+grades.values()
+# >> dict_values(['B', 'A+', 'A'])
+```
+
+- Can't guarantee there's a particular order to elements
+
+- **Values**:
+  - any type (immutable or mutable)
+  - can be duplicates
+  - can be lists or even other dictionaries
+- **Keys**:
+  - must be *unique*
+  - immutable type (`int, float, string, tuple, bool`)
+  - careful with `float`as key -- if `float`has an accuracy issue we might not find it
+- **no order** to keys or values
+- **Example --** Functions to analyze song lyrics
+  **1.** create a **frequency dictionary** mapping `str:int`
+  
+```python
+def lyrics_to_frequencies(lyrics):
+
+    myDict = {}
+
+    for word in lyrics:
+        if word in myDict:
+            myDict[word] += 1
+        else:
+            myDict[word] = 1
+
+    return myDict
+```
+
+  **2.** find **word that occurs the most** and how many times
+    - use a list, in case there is more than one word
+    - return a tuple `(list,int)` for `(word_list, highest_freq)`
+
+```python
+def most_common_words(freqs):
+    
+    values = freqs.values()
+    best = max(values)
+    words = []
+
+    for k in freqs:
+        if freqs[k] == best:
+            words.append(k)
+    
+    return (words, best)
+```
+
+  **3.** find the **words that occur at least X times**
+    - let user choose 'at least X times'
+    - return a list of tuples each tuple is a `(list, int)` containing the list of words ordered by their frequency
+
+```python
+def words_often(freqs, minTimes):
+
+    result = []
+    done = False
+
+    while not done:
+        temp = most_common_words(freqs)
+        if temp[1] >= minTimes:
+            result.append(temp)
+            for w in temp[0]:
+                del(freqs[w])
+            else:
+                done = True
+    
+    return result
+```
+
+- Calculate Fibonacci without recalculating values there were already found:
+
+```python
+def fib_efficient(n, d = {1:1, 2:2}):
+
+  if n in d:
+    return d[n]
+  else:
+    ans = fib_efficient(n-1, d) + fib_efficient(n-2, d)
+    d[n] = ans
+    return ans
+```

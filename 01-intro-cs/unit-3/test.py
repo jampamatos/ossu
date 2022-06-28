@@ -1,16 +1,40 @@
-# Your Code Here
-# [2, -3, 9, -8]
+animals = { 'a': ['aardvark'], 'b': ['baboon'], 'c': ['coati']}
 
-testList = [1, -4, 8, -9]
+animals['d'] = ['donkey']
+animals['d'].append('dog')
+animals['d'].append('dingo')
 
-def applyToEach(L, f):
-    for i in range(len(L)):
-        L[i] = f(L[i])
+def how_many(aDict):
+    '''
+    aDict: A dictionary, where all the values are lists.
 
-def plusOne(a):
-    if a > 0:
-        return a + 1
-    else:
-        return a - 1
+    returns: int, how many values are in the dictionary.
+    '''
+    # Your Code Here
+    num = 0
 
-applyToEach(testList,plusOne)
+    for v in aDict.values():
+        num += len(v)
+    
+    return num
+
+def biggest(aDict):
+    '''
+    aDict: A dictionary, where all the values are lists.
+
+    returns: The key with the largest number of values associated with it
+    '''
+    # Your Code Here
+    biggest = ''
+    biggest_len = 0
+
+    for k in aDict:
+        if len(aDict[k]) >= biggest_len:
+            biggest = k
+            biggest_len = len(aDict[k])
+    
+    return biggest
+
+
+#print(how_many(animals))
+print(biggest(animals))
