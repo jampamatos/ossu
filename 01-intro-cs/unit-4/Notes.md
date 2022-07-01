@@ -184,3 +184,25 @@ def get_ratios(L1, L2):
       raise ValueError('get_ratios called with bad arg')
   return ratios
 ```
+
+- **Assertions:**
+  - used to be sure that assumptions on state of computation are as expected
+  - use an `assert` statement to raise an `AssertionError` exception if assumptions not met
+  - defensive programming
+
+```python
+def avg(grades):
+  assert not len(gradefs) == 0, 'no grades data'
+  return sum(grades)/len(grades)
+```
+
+- Assertions don't allow a programmer to control response to unexpected conditions
+- Ensure that **execution halts** whenever an expected condition is not met
+- typically used to **check inputs** to funcions procedures
+- can be used to **check outputs** of a function to avoid propagating bad values
+- can make it easier to locate a source of bug
+- where to use:
+  - check **types** of argument or values
+  - check that **invariants** on data structures are met
+  - check **constrains** on return values
+  - check for **violations** of constrains on procedure (e.g. no duplicates in a list)
