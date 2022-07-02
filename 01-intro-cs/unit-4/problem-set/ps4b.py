@@ -1,3 +1,7 @@
+from hashlib import new
+from re import A
+
+from click import prompt
 from ps4a import *
 import time
 
@@ -124,10 +128,42 @@ def playGame(wordList):
 
     wordList: list (string)
     """
-    # TO DO... <-- Remove this comment when you code this function
-    print("playGame not yet implemented.") # <-- Remove this when you code this function
+    hand = {}
+    n = HAND_SIZE
 
-        
+    while True:
+        firstPrompt = input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ').lower()
+
+        if firstPrompt == 'e':
+            break
+        elif firstPrompt == 'n' or firstPrompt == 'r':
+            print('')
+            if firstPrompt == 'n':
+                hand = dealHand(n)
+            elif firstPrompt =='r' and not hand:
+                print('You have not played a hand yet. Please play a new hand first!')
+                print('')
+                continue
+                
+            while True:
+                secondPrompt = input('Enter u to have yourself play, c to have the computer play: ').lower()
+                if secondPrompt == 'u':
+                    print('')
+                    playHand(hand,wordList,n)
+                    print('')
+                    break
+                elif secondPrompt == 'c':
+                    print('')
+                    compPlayHand(hand,wordList, n)
+                    print('')
+                    break
+                else:
+                    print('')
+                    print('Invalid command.')
+        else:
+            print('Invalid command.')
+            print('')
+
 #
 # Build data structures used for entire session and play game
 #
