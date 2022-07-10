@@ -119,8 +119,8 @@
 
 ```python
 try:
-  a = int(input("Tell me one number: ")
-  b = int(input("Tell me another number: ")
+  a = int(input("Tell me one number: "))
+  b = int(input("Tell me another number: "))
   print (a/b)
   print("Okay")
 except:
