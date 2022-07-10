@@ -6,14 +6,19 @@
   - [TABLE OF CONTENTS](#table-of-contents)
   - [UNIT 5 - OBJECT ORIENTED PROGRAMMING](#unit-5---object-oriented-programming)
     - [5.1. Classes and Inheritance](#51-classes-and-inheritance)
-    - [5.2. Methods](#52-methods)
-    - [5.3. Examples](#53-examples)
-    - [5.4. Why OOP](#54-why-oop)
-    - [5.5. Hierarchies](#55-hierarchies)
+      - [5.1.1. Object Oriented Program](#511-object-oriented-program)
+      - [5.1.2. Methods](#512-methods)
+      - [5.1.3. Examples](#513-examples)
+      - [5.1.4. Why OOP](#514-why-oop)
+      - [5.1.5. Hierarchies](#515-hierarchies)
+      - [5.1.6. Class Variables](#516-class-variables)
+    - [5.2. An Extended Example](#52-an-extended-example)
 
 ## UNIT 5 - OBJECT ORIENTED PROGRAMMING
 
 ### 5.1. Classes and Inheritance
+
+#### 5.1.1. Object Oriented Program
 
 - All data in Python (`int`, `float`, `string`, etc) are an instance of an **object**.
 - All objects have:
@@ -97,7 +102,7 @@ print(origin.x)
   - within the scope of that frame we bound values to data attribute variables
   - `c.x` is interpreted as getting the value of `c` (a frame) and then looking up the value associate with `x` within that frame (thus the specific value for this instance)
 
-### 5.2. Methods
+#### 5.1.2. Methods
 
 - A **method** is a procedural attribute, like a function that *works only with this class*.
 - Python will always pass the actual object as the first argument.
@@ -199,7 +204,7 @@ print(c - d)
 # <2,3>
 ```
 
-### 5.3. Examples
+#### 5.1.3. Examples
 
 - **Example: Fractions**
 
@@ -281,7 +286,7 @@ class intSet(object):
     # result[:-1] to remove last comma
 ```
 
-### 5.4. Why OOP
+#### 5.1.4. Why OOP
 
 - **bundle together objects** that share
   - common attributes and
@@ -352,7 +357,7 @@ class Animal(object):
 - if you are **accessing data attriutes** outisde the class and class **definition changes**, may get errors
 - outside of class, use getters and setters instead
 
-### 5.5. Hierarchies
+#### 5.1.5. Hierarchies
 
 - **parent class** (superclass)
 - **child class** (subclass)
@@ -483,4 +488,458 @@ tullio.age_diff(jampa)
 # Tullio is 23 years younger than Jampa
 tullio.speak()
 # I need to sleep
+```
+
+#### 5.1.6. Class Variables
+
+- **Class Variable** is declared inside a Class definition but outside all methods
+- It belongs to the class and is shared among all object/instances of that class
+
+```python
+class Dog(Animal):
+
+  tag = 1
+
+  def __init__(self, age, parent1=None, parent2=None):
+    Animal.__init__(self,age)
+    self.parent1 = parent1
+    self.parent2 = parent2
+    self.dog_id = Dog.tag
+    Dog.tag += 1
+  
+  def get_dog_id(self):
+    return str(self.dog_id).zfill(3)
+  
+  def get_parent_1(self):
+    return self.parent1
+  
+  def get_parent_2(self):
+    return self.parent
+  
+  def speak(self):
+    print('woof')
+  
+  def __str__(self):
+    return f"dog:{self.name}:{self.age}"
+
+  def __add__(self, other):
+    return Dog(0, self, other)
+  
+
+peter = Dog(2)
+peter.set_name('Peter')
+
+hopsy = Dog(3)
+hopsy.set_name('Hopsy')
+
+cotton = Dog(1, peter, hopsy)
+cotton.set_name('Cotton')
+
+print(cotton)
+# dog:Cotton:1
+print(cotton.get_parent_1())
+# dog:Peter:2
+
+mopsy = peter + hopsy
+print(mopsy)
+# dog:None:0
+print(mopsy.get_parent_1())
+# dog:Peter:2
+print(mopsy.get_parent_2())
+# dog:Hopsy:3
+```
+
+- `tag` is a class variable -- it is not bound by any instance variable.
+- `dog_id` binds the `tag` to it's instance, but increments tag by 1, so next time a `Dog` instance is created, `tag` is going to be 2.
+- `tag` used to give **unique id** to each new dog instance
+
+### 5.2. An Extended Example
+
+- Building an application that organizes info about people
+- start with a `Person` object
+  - Person: name, birthday
+    - get last name
+    - sort by last name
+    - get age
+
+```python
+import datetime
+
+class Person(object):
+
+  def __init__(self, name):
+    """create a person called name"""
+    self.name = name
+    self.birthday = None
+    self.lastName = name.split(' ')[-1]
+  
+  def setBirthday(self, month, day, year):
+    """sets self's birthday to birthDate"""
+    self.birthday = datetime.date(year,month,day)
+  
+  def getAge(self):
+    """returns self's current age in days"""
+    if self.birthday == None:
+      raise ValueError
+
+    return (datetime.date.today() - self.birthday).days
+  
+  def getLastName(self):
+    """returns self's last name"""
+    return self.lastName
+  
+  def __str__(self):
+    """return self's full name"""
+    return self.name
+  
+  def __lt__(self, other):
+    """Less Than: returns True if self's name is lexicographically less
+        than the other's name, and false otherwise"""
+    if self.lastName == other.lastName:
+      return self.name < other.name
+    
+    return self.lastName < other.lastName
+  
+p1 = Person('Mark Zuckeberg')
+p1.setBirthday(5,14,84)
+p2 = Person('Drew Houston')
+p2.setBirthday(3,4,83)
+p3 = Person('Bill Gates')
+p3.setBirthday(10,28,55)
+p4 = Person('Andrew Gates')
+p5 = Person('Steve Wozniak')
+
+personList = [p1, p2, p3, p4, p5]
+
+print(p1)
+# Mark Zuckeberg
+
+for e in personList:
+  print(e)
+# Mark Zuckeberg
+# Drew Houston
+# Bill Gates
+# Andrew Gates
+# Steve Wozniak
+
+personList.sort()
+
+for e in personList:
+  print(e)
+# Andrew Gates
+# Bill Gates
+# Drew Houston
+# Steve Wozniak
+# Mark Zuckeberg
+```
+
+- Expand `Person` info
+  - MITPerson: Person + IDNumber
+    - assign ID numbers in sequence
+    - get ID number
+    - sort by ID number
+
+```python
+class MITPerson(Person):
+  nextIdNum = 0
+
+  def __init__(self,name):
+    Person.__init__(self,name)
+    self.idNum = MITPerson.nextIdNum
+    MITPerson.nextIdNum += 1
+  
+  def getIdNum(self):
+    return self.idNum
+  
+  def __lt__(self, other):
+    return self.idNum < other.idNum
+  
+  def speak(self, utterance):
+    return f"{self.getLastName()} says: {utterance}"
+  
+m3 = MITPerson('Mark Zuckeberg')
+Person.setBirthday(m3,5,14,84)
+m2 = MITPerson('Drew Houston')
+Person.setBirthday(m2, 3,4,83)
+m1 = MITPerson('Bill Gates')
+Person.setBirthday(m1, 10,28,55)
+
+MITPersonList = [m1, m2, m3]
+print(m1)
+# Bill Gates
+print(m1.speak('Hi there!'))
+# Gates says: Hi there!
+
+for e in MITPersonList:
+  print(e)
+# Bill Gates
+# Drew Houston
+# Mark Zuckeberg
+
+MITPersonList.sort()
+
+for e in MITPersonList:
+  print(e)
+# Mark Zuckeberg
+# Drew Houston
+# Bill Gates
+```
+
+- Keep expanding the classes:
+  - Students: several types, all MIT Person
+    - undergraduate student: has a class year
+    - graduate student
+
+```python
+class Student(MITPerson):
+  pass
+
+class UG(Student):
+  def __init__(self, name, classYear):
+    MITPerson.__init__(self, name)
+    self.year = classYear
+  
+  def getClass(self):
+    return self.year
+  
+  def speak(self, utterance):
+    return MITPerson.speak(self, f"Dude, {utterance}")
+  
+class Grad(Student):
+  pass
+
+class TransferStudent(Student):
+  pass
+
+def isStudent(obj):
+  return isinstance(obj,Student)
+
+s1 = UG('Matt Damon', 2017)
+s2 = UG('Ben Affleck', 2017)
+s3 = UG('Lin Manuel Miranda', 2018)
+s4 = Grad ('Leonardo DiCaprio')
+
+studentList = [s1, s2, s3, s4]
+
+print(s1)
+# Matt Damon
+print(s1.getClass())
+# 2017
+print(s1.speak('where is the quiz?'))
+print(s2.speak('I have no clue!'))
+# Damon says: Dude, where is the quiz?
+# Affleck says: Dude, I have no clue!
+```
+
+- **Substitution principle:** important behavior of superclass should be supported by all subclasses.
+- Inherited methods to leverage methods from other classes in the hierachy
+  - Professor class:
+    - also MIT Person
+    - different behaviors
+
+```python
+class Professor(MITPerson):
+  def __init__(self, name, department):
+    MITPerson.__init__(self, name)
+    self.department = department
+  
+  def speak(self, utterance):
+    new = f"In course {self.department} we say "
+    return MITPerson.speak(self, new + utterance)
+  
+  def lecture(self, topic):
+    return self.speak(f"it is obvious that {topic}")
+
+faculty = Professor('Doctor Eric Grimsson', 'six')
+print(faculty.speak('hi there!'))
+# Grimsson says: In course six we say hi there!
+print(faculty.lecture('Object Oriented Programming'))
+# Grimsson says: In course six we say it is obvious that Object Oriented Programming
+```
+
+- Create a class that includes instances of other classes within it
+- Concept:
+  - build a data structure that can hold grades for students
+  - gather together data and procedure for dealing with them in a single structure, so that users can manipulate without having to know internal details
+
+```python
+class Grades(object):
+  """A mapping from students to a list of grades"""
+
+  def __init__(self):
+    """Create an empty grade book"""
+    self.students = []
+    self.grades = {}
+    self.isSorted = True
+  
+  def addStudent(self, student):
+    """Assumes: student is of type Student
+       Add student to grade book"""
+    if student in self.students:
+      raise ValueError('Duplicate student')
+    self.students.append(student)
+    self.grades[student.getIdNum()] = []
+    self.isSorted = False
+  
+  def addGrade(self, student, grade):
+    """Assumes: grade is a float
+       Add grade to the list of grades for student"""
+    try:
+      self.grades[student.getIdNum()].append(grade)
+    except KeyError:
+      raise ValueError('Student not in grade book')
+  
+  def getGrades(self, student):
+    """Return a list of grades for student"""
+    try:
+      return self.grades[student.getIdNum()][:]
+    except KeyError:
+      raise ValueError('Student not in grade book')
+  
+  def allStudents(self):
+    """Return a list of students in the grade book"""
+    if not self .isSorted:
+      self.students.sort()
+      self.isSorted = True
+    return self.students[:]
+
+def gradeReport(course):
+  """Assumes: course is of type Grades"""
+  report = []
+  for student in course.allStudents():
+    total = 0.0
+    numGrades = 0
+    for grade in course.getGrades(student):
+      total += grade
+      numGrades += 1
+    try:
+      average = total / numGrades
+      report.append(f"{student}'s mean grade is {average}")
+    except:
+      report.append(f"{student} has no grades")
+  return '\n'.join(report)
+
+ug1 = UG('Matt Damon',2018)
+ug2 = UG('Ben Affleck', 2019)
+ug3 = UG('Drew Houston', 2017)
+ug4 = UG('Mark Zuckerberg', 2017)
+g1 = Grad('Bill Gates')
+g2 = Grad('Steve Wozniak')
+
+six00 = Grades()
+six00.addStudent(g1)
+six00.addStudent(ug2)
+six00.addStudent(ug1)
+six00.addStudent(g2)
+six00.addStudent(ug4)
+six00.addStudent(ug3)
+
+six00.addGrade(g1, 100)
+six00.addGrade(g2, 25)
+six00.addGrade(ug1, 95)
+six00.addGrade(ug2, 85)
+six00.addGrade(ug3, 75)
+
+print(gradeReport(six00))
+# Matt Damon's mean grade is 95.0
+# Ben Affleck's mean grade is 85.0
+# Drew Houston's mean grade is 75.0
+# Mark Zuckerberg has no grades
+# Bill Gates's mean grade is 100.0
+# Steve Wozniak's mean grade is 25.0
+
+six00.addGrade(g1, 90)
+six00.addGrade(g2, 45)
+six00.addGrade(ug1, 80)
+six00.addGrade(ug2, 75)
+print(gradeReport(six00))
+# Matt Damon's mean grade is 87.5
+# Ben Affleck's mean grade is 80.0
+# Drew Houston's mean grade is 75.0
+# Mark Zuckerberg has no grades
+# Bill Gates's mean grade is 95.0
+# Steve Wozniak's mean grade is 35.0
+```
+
+- Current version works but is inefficient: to get a list of all students, we have to create a copy of the internal list
+  - Let us manipulate ot without changing the internal structure
+  - Works for small, 30-40 students, expensive in a MOOC with hundreds of thousands of students
+- **Generators:**
+  - Any procedure or method with an `yield` statement is called a **generator**
+
+```python
+def genTest():
+  yield 1
+  yield 2
+
+foo = genTest()
+foo.__next__()
+# => 1
+foo = genTest()
+foo.__next__()
+# => 2
+foo = genTest()
+foo.__next__()
+# => StopIteration
+
+
+```
+
+- Generators have a `next()` method wich starts/resumes execution of procedure.
+- Inside of generator:
+  - `yield` suspend execution and returns a value
+  - returning from a generator raises a `StopIteration` exception
+- Can use a generator inside a looping structure, as it will continue until it gers a StopIterarion exception:
+
+```python
+for n in genTest():
+  print(n)
+
+# 1
+# 2
+```
+
+```python
+def genFib():
+  fibn_1 = 1 # fib (n - 1)
+  fibn_2 = 0 # fib (n - 2)
+  
+  while True:
+    # fib(n) = fib(n - 1) + fib(n - 2)
+    next = fibn_1 + fibn_2
+    yield next
+    # will hold execution until generator called __next__()
+    fibn_2 = fibn_1
+    fibn_1 = next
+    
+fib = genFib()
+fib.__next__()
+# 1
+fib.__next__()
+# 2
+fib.__next__()
+# 3
+fib.__next__()
+# 5
+fib.__next__()
+# 8
+fib.__next__()
+# 13
+fib.__next__()
+# 21
+```
+
+- Generators separates the concept of computing a long sequence of objects, from the actual process of computing them explicitly
+- allows one to generate each new objects as needed as part of another computation (rather than computing a very long sequence, only to throw most of it away while you do something on an element, then repeating the process)
+- have alreary seen this idea in `range`
+- Fix to grades class:
+
+```python
+def allStudents(self):
+    """Return a list of students in the grade book"""
+    if not self .isSorted:
+      self.students.sort()
+      self.isSorted = True
+    for student in self.students:
+      yield student
 ```
