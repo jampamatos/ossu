@@ -7,6 +7,9 @@
   - [UNIT 5 - OBJECT ORIENTED PROGRAMMING](#unit-5---object-oriented-programming)
     - [5.1. Classes and Inheritance](#51-classes-and-inheritance)
     - [5.2. Methods](#52-methods)
+    - [5.3. Examples](#53-examples)
+    - [5.4. Why OOP](#54-why-oop)
+    - [5.5. Hierarchies](#55-hierarchies)
 
 ## UNIT 5 - OBJECT ORIENTED PROGRAMMING
 
@@ -196,6 +199,8 @@ print(c - d)
 # <2,3>
 ```
 
+### 5.3. Examples
+
 - **Example: Fractions**
 
 - Create a *new type* to represent number as a fraction
@@ -274,4 +279,208 @@ class intSet(object):
     return '{' + result[:-1] + '}'
     
     # result[:-1] to remove last comma
+```
+
+### 5.4. Why OOP
+
+- **bundle together objects** that share
+  - common attributes and
+  - procedures that operate on those attributes
+- uses **abstraction** to make a distinct between how to implement an object vs how to use the object
+- build **layers** of object abstraction that inherit behavior from other classes of objects
+- create ou **own classes of objects** on top of Python's basic classes
+- Groups of objects have attributes:
+  - **data attributes:**
+    - how can you represent your object with data?
+    - **what it is**
+      - for a coordinate: x and y values
+      - for an animal: age and name
+  - **procedual attributes:**
+    - what kind of things can you write with the object?
+    - **what it does**
+      - for a coordinate: find distance between two
+      - for an animal: make a sound
+
+```python
+class Animal(object):
+  def __init__(self, age):
+    self.age = age
+    self.name = None
+  
+  def get_age(self):
+    return self.age
+  
+  def get_name(self):
+    return self.name
+  
+  def set_age(self, newage):
+    self.age = newage
+  
+  def set_name(self, newname):
+    self.name = newname
+  
+  def __str__(self):
+    return f"animal:{self.name}:{self.age}"
+  
+
+my_animal = Animal(3)
+print(my_animal)
+# animal:None:3
+
+my_animal.set_name('Mike')
+print(my_animal)
+# animal:Mike:3
+```
+
+- **dot notation** can be used to access attributes (data and methods) though it is better ti use getters and setters to access data attributes
+
+`a.age` but `a.get_age()` **is preferred**
+
+- **Information hiding**
+  - author of class definition may change data attribute variable names
+
+```python
+class Animal(object):
+  def __init__(self, age):
+    self.years = age
+    # replaced age data attribute by years
+  
+  def get_age(self):
+    return self.years
+```
+
+- if you are **accessing data attriutes** outisde the class and class **definition changes**, may get errors
+- outside of class, use getters and setters instead
+
+### 5.5. Hierarchies
+
+- **parent class** (superclass)
+- **child class** (subclass)
+  - inherits all data and behavior of parent class
+  - add more info
+  - add more behavior
+  - override behavior
+
+```python
+class Animal(object):
+  def __init__(self, age):
+    self.age = age
+    self.name = None
+  
+  def get_age(self):
+    return self.age
+  
+  def get_name(self):
+    return self.name
+  
+  def set_age(self, newage):
+    self.age = newage
+  
+  def set_name(self, newname=''):
+    self.name = newname
+  
+  def __str__(self):
+    return f"animal:{self.name}:{self.age}"
+  
+class Cat(Animal):
+  def speak(self):
+    print('meow')
+  
+  def __str__(self):
+    return f"cat:{self.name}:{self.age}"
+
+class Dog(Animal):
+  def speak(self):
+    print('woof')
+  
+  def __str__(self):
+    return f"dog:{self.name}:{self.age}"
+
+jelly = Cat(1)
+jelly.set_name('Jelly')
+print(jelly)
+# cat:Jelly:1
+jelly.speak()
+# meow
+
+mike = Dog(2)
+mike.set_name('Mike')
+print(mike)
+# dog:Mike:2
+mike.speak()
+# woof
+```
+
+- subclass can have **methods with same name** as superclass
+- subclass can have **methods with same name** as other subclasses
+- when we call a method on an object instance:
+  - look for a method name in **current class definition**
+  - if not found, look for method name **up the hierarchy** (in parent, then grandparent, and so on)
+  - use first method up the hierarchy found under that name, throw an error if doesn't find it
+
+```python
+class Person(Animal):
+  def __init__(self, name, age):
+    Animal.__init__(self, age)
+    Animal.set_name(self, name)
+    self.friends = []
+  
+  def get_friends(self):
+    return self.friends
+  
+  def add_friend(self, fname):
+    if fname not in self.friends:
+      self.friends.append(fname)
+  
+  def speak(self):
+    print("Hello!")
+  
+  def age_diff(self, other):
+    diff = self.get_age() - other.get_age()
+    if self.get_age() > other.get_age():
+      print(f"{self.name} is {diff} years older than {other.name}")
+    else:
+      print(f"{self.name} is {-diff} years younger than {other.name}")
+  
+  def __str__(self):
+    return f"person:{self.name}:{self.age}"
+
+class Student(Person):
+  def __init__(self, name, age, major=None):
+    Person.__init__(self, name, age)
+    self.major = major
+  
+  def change_major(self, major):
+    self= major
+  
+  def speak(self):
+    r = random.random()
+    if r < 0.25:
+      print('I have homework')
+    elif 0.25 <= r < 0.5:
+      print('I need to sleep')
+    elif 0.5 <= r < 0.75:
+      print('I should eat')
+    else:
+      print("I'm playing Xbox")
+  
+  def __str__(self):
+    return f"student:{self.name}:{self.age}:{self.major}"
+    
+jampa = Person("Jampa", 38)
+quim = Person("Joaquim", (2022-1950))
+print(jampa)
+# person:Jampa:38
+jampa.speak()
+# Hello!
+jampa.age_diff(quim)
+# Jampa is 34 years younger than Joaquim
+
+tullio = Student('Tullio', 15)
+print(tullio)
+# student:Tullio:15:None
+tullio.age_diff(jampa)
+# Tullio is 23 years younger than Jampa
+tullio.speak()
+# I need to sleep
 ```
