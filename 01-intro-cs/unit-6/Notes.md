@@ -14,6 +14,10 @@
     - [6.2. Searching and Sorting Algorithms](#62-searching-and-sorting-algorithms)
       - [6.2.1. Search Algorithms](#621-search-algorithms)
       - [6.2.2. Bisection Search](#622-bisection-search)
+      - [6.2.3. Bogo Sort](#623-bogo-sort)
+      - [6.2.4. Bubble Sort](#624-bubble-sort)
+      - [6.2.5. Selection Sort](#625-selection-sort)
+      - [6.2.6. Merge Sort](#626-merge-sort)
 
 ## UNIT 6 - ALGORITHMIC COMPLEXITY
 
@@ -551,3 +555,145 @@ def bisect_search2(L, e):
   - **AMORTIZE COST** of the sort over many searches
   - `SORT + K*O(log n) < K*O(n)
   - for large `K`, **SORT time becomes irrelevant**
+
+#### 6.2.3. Bogo Sort
+
+- Randomly assign elements to list and check if they are in order: if they are not, randomly assign them again, until they get into order
+
+```python
+from random import random
+
+
+def bogo_sort(L):
+    while not is_sorted(L):
+        random.shuffle(L)
+```
+
+- Complexity:
+  - best case: *O(n) where n is len(L)** to check if sorted
+  - worst case: **unbounded** because there is no garantee that a solution will ever come up
+  
+#### 6.2.4. Bubble Sort
+
+- **compare consecutive pairs** of elements
+- **swap elements** in pair such that smaller is first
+- when reach end of list, **start over** again
+- stop when **no more swaps** have been mad
+
+```python
+def bubble_sort(L):
+    swap = False
+    while not swap:
+        swap = True
+        for j in range(1, len(L)):
+            if L[j-1] > L[j]:
+                swap = False
+                temp = L[j]
+                L[j] = L[j-1]
+                L[j-1] = temp
+```
+
+- inner loop is for doing the **comparisons**
+- outer while loop is for doing **multiple passes** until no more swap
+- Complexity:
+  - **O(n²) where n is len(L)** because outer loop is O(n) and inner loop also O(n), to do n-1 comparisons and n-1 passes
+  
+#### 6.2.5. Selection Sort
+
+- first step:
+  - extract **minimum elemen**
+  - **swap it** with element at **index 0**
+- subsequent step:
+  - in remaining sublists, extract **minimum element**
+  - **swap it** with the element at **index 1**
+keep the left portion of the list sorted
+  - at `ith` step, **first i elements in list are sorted**
+  - all other elements are bigger than first `i` elements
+- Analyzing selection sort:
+  - loop invatiant:
+    - given prefix of list L[0:i] and suffix L[i+1:len(L)] the prefix is sorted and no element in prefix is larger than smallest element in suffix
+      1. **base case:** prefix empty, suffix whole list -- invariant true
+      2. **induction step:** move minimum element from end of prefix. Since invariant true before move, prefix sorted after append
+      3. **when exit**, prefix is entire list, suffix empty, so sorted
+
+```python
+def selection_sort(L):
+    suffixSt = 0
+    while suffixSt != len(L):
+        for i in range(suffixSt, len[L]):
+            if L[i] < L[suffixSt]:
+                L[suffixSt], L[i] = L[i], L[suffixSt]
+        suffixSt += 1
+```
+
+- Complexity:
+  - outer loop executes len(L) times
+  - inner loop executes len(L) - i times
+  - Still quadratic, **O(n²) where n is len(L)**
+
+#### 6.2.6. Merge Sort
+
+- Use a divide-and-conquer approach
+  1. if a list is of length 0 or 1, already sorted
+  2. if list has more than one element, split into two lists and sort each
+  3. merge sorted sublists:
+
+      a. look at first element of each, move smaller to end
+
+      b. when one list is empty, just copy the rest of other list
+
+```python
+def merge(left, right):
+    result = []
+    i,j = 0,0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    while (i < len(left)):
+        result.append(left[i])
+        i += 1
+    while (j < len(right)):
+        result.append(right[j])
+        j += 1
+    return result
+```
+
+- Complexity of merging:
+  - go through two lists, only one pass
+  - compare only **smallest elements in each sublist**
+  - O(len(left) + len(right)) copied elements
+  - O(len(longer list)) comparisons
+  - **linear in length of the lists**
+
+- Merge sort algorithm recursive:
+
+```python
+def merge_sort(L):
+    if len(L) < 2:
+        return L[:]
+    else:
+        middle = len(L) // 2
+        left = merge_sort(L[:middle])
+        right = merge_sort(L[middle:])
+        return merge(left, right)
+```
+
+- **divide list** successively into halves
+- depth-first such that **conquer smallest pieces down one branch** first before moving to larger pieces
+
+![Merge-Sort Diagram](mergesort.png)
+
+- Complexity of Merge-Sort:
+  - at **first recursion level**
+    - n/2 elements in each list
+    - O(n) + O(n) = O(n) where n is len(L)
+  - at **second recursion level**
+    - n/4 elements in each list
+    - two merges -> O(n) where n in len(L)
+  - each recursion level is O(n) where n is len(N)
+  - **dividing list in half** with each recursive call -> O(log(n)) where n is len(L)
+  - overall complexity is **O(n log(n))** where n is len(L)
