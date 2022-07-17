@@ -9,6 +9,11 @@
       - [6.1.1. Program Efficiency](#611-program-efficiency)
       - [6.1.2. Big Oh Notation](#612-big-oh-notation)
       - [6.1.3. Complexity Classes](#613-complexity-classes)
+      - [6.1.4. Recursion Complexity](#614-recursion-complexity)
+      - [6.1.4. Big Oh Summary](#614-big-oh-summary)
+    - [6.2. Searching and Sorting Algorithms](#62-searching-and-sorting-algorithms)
+      - [6.2.1. Search Algorithms](#621-search-algorithms)
+      - [6.2.2. Bisection Search](#622-bisection-search)
 
 ## UNIT 6 - ALGORITHMIC COMPLEXITY
 
@@ -271,3 +276,278 @@ def fact_recur(n):
 - **Log-linear complexity:**
   - many practical algorithms are log-linear
   - very commonly used log-linear algorithm is merge sort
+
+- **Polynomial Complexity:**
+  - most common polynomial algorithms are quadratic, as in complexity grows with square of size of input
+  - commonly occurs when we have nested loops or recursive function calls
+  
+```python
+def isSubset(L1, L2):
+    for e1 in L1:
+        matched = False
+        for e2 in L2:
+            if e1 == e2:
+                matched = True
+                break
+        if not matched:
+            return False
+    return True
+```
+
+- The outer loop is executed len(L1) times.
+- With each iteration, it will also execute the inner loop up to len(L2) times
+- `**O(len(l1) * len(L2))`
+- worst case when `len(L1) == len(L2)` == `n`
+- **`O(n²)`**
+
+```python
+def intersect(L1, L2):
+    tpm = []
+    for e1 in L1:
+        for e2 in L2:
+            if e1 == e1:
+                tpm.append(e1)
+    res = []
+    for e in tpm:
+        if not (e in res):
+            res.append(e)
+    return res
+```
+
+- First nested loop takes `len(L1) * len(L2)` steps
+- Second loop takes at most `len(L1)` steps
+- Latter term overwhelmed by former term
+- **`O(len(L1) * len(L2))'** -> **O(n²)**
+
+```python
+def g(n):
+    x = 0
+    for i in range(n):
+        for j in range(n):
+            x += 1
+    return x
+```
+
+- computes n² very inefficiently
+- when dealing with nested loops, **look at the ranges**
+- nested loops, **each iterating n times**
+- **O(n²)**
+
+```python
+def genSubsets(L):
+    if len(L) == 0:
+        return [[]]
+    smaller = genSubsets(L[:-1])
+    extra = L[-1:]
+    new = []
+    for small in smaller:
+        new.append(small + extra)
+    return smaller + new
+
+arr1 = [1,2,3,4]
+print(genSubsets(arr1))
+```
+
+#### 6.1.4. Recursion Complexity
+
+- Tricy complexity:
+
+```python
+def h(n):
+    answer = 0
+    s = str(n)
+    for c in s:
+        answer += int(c)
+    return answer
+```
+
+- Adds digits of a number together
+- linear O(len(s)) in terms of string, but what in terms of input n?
+- tricky part:
+  - convert integer to string
+  - iterate over **length of string**, not magnitude of input n
+  - think of it like dividing n by 10 each iteration
+- **O(log n)** - base doesn't matter
+
+- Complexity of Iterative Fibonacci:
+
+```python
+def fib_iter(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        fib_i = 0
+        fib_ii = 1
+        for i in range(n - 1):
+            tmp = fib_i
+            fib_i = fib_ii
+            fib_ii = tmp + fib_ii
+        return fib_ii
+```
+
+- The loop runs linear, because only constant operations executed n times, the rest is constant.
+- **`O(n)`**
+
+```python
+def fib_recur(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fib_recur(n - 1) + fib_recur(n - 2)
+```
+
+- **`O(2^n)`**
+
+- When input is a list:
+
+```python
+def sum_list(L):
+    total = 0
+    for e in L:
+        total += e
+    return total
+```
+
+- O(n) where n is the length if the list
+- O(len(L))
+- must **define what size of input means**
+  - previously it was the magnitude of a number
+  - here, it is the length of the list
+  
+#### 6.1.4. Big Oh Summary
+
+- compare **efficiency of algorithms**
+  - notation that describes growth
+  - **lower order of growth** is better
+  - independent of machine or specific implementation
+  
+- use Big Oh:
+  - describe order of growth
+  - **asymptotic notation**
+  - **upper bound**
+  - **worst case** analysis
+
+### 6.2. Searching and Sorting Algorithms
+
+#### 6.2.1. Search Algorithms
+
+- Search algorithm is a method for findgin an item or group of items with specific properties within a collection of items
+- collection could be implicit:
+  - example - finding a square root as a search problem:
+    - exhaustive enumeration
+    - bisection search
+    - Newton-Raphson
+- collection could be explicit
+  - example: is a student record in a stored collection of data?
+  
+- Linear search:
+  - brute force search
+  - list does not have to be sorted
+- bisection search
+  - list **MUST BE SORTED** to give correct answer
+
+- Linear search on *unsorted* list:
+
+```python
+def linear_search(L, e):
+    found = False
+    for i in range(len(L)):
+        if e == L[i]:
+            found = True
+    return found
+```
+
+- must go through all elements to decide it's not there
+- complexity = `O(len(L)` linear
+- can speed up a little by returning `True` as soon as found `e`, but doesn't impact worst case
+
+#### 6.2.2. Bisection Search
+
+- Doing a linear search on a **sorted list:**
+
+```python
+def search(L, e):
+    for i in range(len(L)):
+        if L[i]  == e:
+            return True
+        if L[i] > e:
+            return False
+    return False
+```
+
+- must only look until reach a number greater than `e`
+- Overall complexity of **`O(len(L))`**
+
+- With bisection search:
+  - pick an index `i` that divides list in half
+  - ask if `L[i] == e`
+  - if not, ask if `L[i]` is larger or smaller than `e`
+  - depending on the answer, search left or right half of `L` for `e`.
+- Break into smaller version of problem (smaller list), plus some simple operations
+- answer to smaller version is anwer to original problem
+- Finish looking through list when `n/2^i = 1`, so `i = log n`
+- Complexity is `**O(log n)**` where `n` is `len(L)`
+
+- Bisection search implementation 1:
+
+```python
+def bisect_search1(L, e):
+    if L == []:
+        return False
+    elif len(L) == 1:
+        return L[0] == e
+    else:
+        half = len(L) // 2
+        if L[half] > e:
+            return bisect_search1(L[:half], e)
+        else:
+            return bisect_search1(L[half:], e)
+```
+
+- Complexity here is larger because the algorithm makes copies of the list in each call, which is demanding.
+
+```python
+def bisect_search2(L, e):
+    def bisect_search_helper(L, e, low, high):
+        if high == low:
+            return L[low] == e
+        mid = (low + high) // 2
+        if L[mid] == e:
+            return True
+        elif L[mid] > e:
+            if low == mid:
+                return False
+            else:
+                return bisect_search_helper(L, e, low, mid - 1)
+        else:
+            return bisect_search_helper(L, e, mid + 1, high)
+    if len(L) == 0:
+        return False
+    else:
+        return bisect_search_helper(L, e, 0, len(L) - 1)
+```
+
+- **Implementation 1:**
+  - O(log n) bissection search calls
+  - O(n) for each bissection call to copy list
+  - **O(n log n)**
+- **Implementation 2:**
+  - pass list and indices as parameters
+  - list never copied, just re-passed
+  - **O(log n)**
+- Searching a sorted list where `n == len(L)`
+  - using **linear search** complexity is **O(n)**
+  - using **binary search** can search for an element in **O(log n)**
+    - assumes **list is sorted**
+    - when does it make sens to **sort first then search**?
+      - `SORT < O(n) - O(log n)`
+      - when sorting is less than O(n) - **NEVER**
+- So when do we sort first?
+  - in some cases, may sort a list once then do many searches
+  - **AMORTIZE COST** of the sort over many searches
+  - `SORT + K*O(log n) < K*O(n)
+  - for large `K`, **SORT time becomes irrelevant**
