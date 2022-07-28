@@ -164,6 +164,14 @@ Run the program and make sure all the tests pass, if not debug until they do. Ma
 
 ## 2. How to Design Data (HtDD)
 
+In any program, we have:
+
+- **problem domain:** we have *information* inside of it.
+  - In a traffic light program, for example: *the traffic light is red*.
+- **program:** we have **data** inside of it
+  - In a program, we have for example the number `0`.
+- We use information on the domain to **represent** data in the program, in turn data **interprets** information on the problem domain.
+
 Data definitions are a **driving element** in the design recipes.
 
 A data definition establishes the *represent/interpret* relationship between information and data:
